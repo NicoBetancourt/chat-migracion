@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"  # Mapea el puerto 8000 del contenedor al host
+    environment:
+      - UVICORN_RELOAD=true  # Permite recarga automática en desarrollo
+    volumes:
+      - .:/app  # Mapea el código local dentro del contenedor
+    command: ["fastapi", "dev", "src/main.py"]

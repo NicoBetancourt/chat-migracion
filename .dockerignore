@@ -1,0 +1,8 @@
+.db_storage
+notebooks
+.venv
+.env*
+.pytest_cache
+notebooks
+Pipfile.lock
+frontend
