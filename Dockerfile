@@ -1,38 +1,29 @@
-# First, build the application in the `/app` directory.
-# See `Dockerfile` for details.
+# Primera fase: Construcción del entorno virtual con UV
 FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 WORKDIR /venv
 
 RUN apt-get update && apt-get install -y libpq-dev gcc && apt-get clean
 
+# Copiar archivos an∫tes de instalar dependencias
 COPY pyproject.toml uv.lock ./
 
+RUN uv sync --frozen --no-dev
 
-RUN --mount=type=cache,id=uv-cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev
-    
-ADD pyproject.toml pyproject.toml
-ADD uv.lock uv.lock
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev
-
-
-# Then, use a final image without uv
+# Segunda fase: Imagen final sin UV
 FROM python:3.12-slim-bookworm
-# It is important to use the image that matches the builder, as the path to the
-# Python executable must be the same, e.g., using `python:3.11-slim-bookworm`
-# will fail.
 
-# Copy the application from the builder
+# Copiar el entorno virtual desde la imagen anterior
 COPY --from=builder --chown=venv:venv /venv /venv
 
-# Place executables in the environment at the front of the path
+# Configurar el PATH para usar el entorno virtual
 ENV PATH="/venv/.venv/bin:$PATH"
 WORKDIR /app
+
+# Copiar el código de la aplicación
 COPY . .
 
 EXPOSE 8000
 
-# Comando por defecto para ejecutar la API con uv
-# CMD ["fastapi", "dev", "src/main.py"]
+# Comando para ejecutar la API
+CMD ["fastapi", "dev", "src/main.py"]
