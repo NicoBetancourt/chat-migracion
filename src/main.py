@@ -1,5 +1,6 @@
 import os
 
+import uvicorn
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -39,3 +40,7 @@ async def read_item(
     comment = State({"messages": input})
     response = await app.ainvoke(comment)
     return {"response": response.get("messages")[-1].content}
+
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
