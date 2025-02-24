@@ -23,7 +23,9 @@ WORKDIR /app
 # Copiar el código de la aplicación
 COPY . .
 
-EXPOSE 8000
+ENV PORT=8000
+EXPOSE ${PORT}
 
 # Comando para ejecutar la API
-CMD ["fastapi", "dev", "src/main.py"]
+
+CMD ["sh", "-c", "fastapi dev src/main.py --host 0.0.0.0 --port ${PORT}"]

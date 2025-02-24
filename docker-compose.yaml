@@ -4,9 +4,10 @@ services:
   api:
     build: .
     ports:
-      - "8000:8000"  # Mapea el puerto 8000 del contenedor al host
+      - "${PORT:-8000}:${PORT:-8000}" 
     environment:
+      - PORT=${PORT:-8000}
       - UVICORN_RELOAD=true  # Permite recarga automática en desarrollo
     volumes:
       - .:/app  # Mapea el código local dentro del contenedor
-    command: ["fastapi", "dev", "src/main.py", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    command: ["sh", "-c", "fastapi dev src/main.py --host 0.0.0.0 --port ${PORT} --reload"]

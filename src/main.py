@@ -1,3 +1,4 @@
+import logging
 import os
 
 import uvicorn
@@ -15,6 +16,9 @@ load_dotenv()
 security = HTTPBearer()
 TOKEN = os.getenv("TOKEN")
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Verifica si el token es válido."""
@@ -25,6 +29,12 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
             headers={"WWW-Authenticate": "Bearer"},
         )
     return credentials.credentials
+
+
+@app.on_event("startup")
+async def startup_event():
+    logger.info(f"Starting up on port {os.getenv('PORT', 8000)}")
+    logger.info(f"Running in environment: {os.getenv('ENV', 'development')}")
 
 
 @app.get("/")
