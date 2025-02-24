@@ -4,12 +4,21 @@ import os
 import uvicorn
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from graph.state import State
 from graph.workflow import workflow
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Cambia esto a los dominios permitidos
+    allow_credentials=True,
+    allow_methods=["*"],  # Asegura que `POST` esté permitido
+    allow_headers=["*"],
+)
 load_dotenv()
 
 # Configuración de seguridad con Bearer Token
