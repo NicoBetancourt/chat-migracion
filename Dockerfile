@@ -23,9 +23,12 @@ WORKDIR /app
 # Copiar el código de la aplicación
 COPY . .
 
-ENV PORT=8000
+# ENV PORT=8000 # para fastapi
+ENV PORT=8501
 EXPOSE ${PORT}
 
 # Comando para ejecutar la API
 
-CMD ["sh", "-c", "fastapi dev src/main.py --host 0.0.0.0 --port ${PORT}"]
+# CMD ["sh", "-c", "fastapi dev src/main.py --host 0.0.0.0 --port ${PORT}"] # para fastapi
+CMD ["sh", "-c", "streamlit run src/app.py --server.port=${PORT} --server.address=0.0.0.0"]
+

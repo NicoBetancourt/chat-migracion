@@ -4,10 +4,11 @@ services:
   api:
     build: .
     ports:
-      - "${PORT:-8000}:${PORT:-8000}" 
+      - "${PORT:-8501}:${PORT:-8501}" 
     environment:
-      - PORT=${PORT:-8000}
+      - PORT=${PORT:-8501}
       - UVICORN_RELOAD=true  # Permite recarga automática en desarrollo
     volumes:
       - .:/app  # Mapea el código local dentro del contenedor
-    command: ["sh", "-c", "fastapi dev src/main.py --host 0.0.0.0 --port ${PORT} --reload"]
+    # command: ["sh", "-c", "fastapi dev src/main.py --host 0.0.0.0 --port ${PORT} --reload"] # FASTAPI
+    command: ["sh", "-c", "streamlit run src/app.py --server.port=${PORT} --server.address=0.0.0.0"]
