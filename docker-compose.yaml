@@ -4,9 +4,9 @@ services:
   api:
     build: .
     ports:
-      - "${PORT:-8501}:${PORT:-8501}" 
+      - "${PORT:-8000}:${PORT:-8000}" 
     environment:
-      - PORT=${PORT:-8501}
+      - PORT=${PORT:-8000}
       - UVICORN_RELOAD=true  # Permite recarga automática en desarrollo
     volumes:
       - .:/app  # Mapea el código local dentro del contenedor

@@ -20,11 +20,14 @@ COPY --from=builder --chown=venv:venv /venv /venv
 ENV PATH="/venv/.venv/bin:$PATH"
 WORKDIR /app
 
+# Crear un usuario sin privilegios para evitar problemas en Railway
+RUN useradd -m streamlit_user
+USER streamlit_user
+
 # Copiar el código de la aplicación
 COPY . .
 
-# ENV PORT=8000 # para fastapi
-ENV PORT=8501
+ENV PORT=8000
 EXPOSE ${PORT}
 
 # Comando para ejecutar la API
