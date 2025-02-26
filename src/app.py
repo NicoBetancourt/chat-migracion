@@ -17,6 +17,7 @@ initial_text = """
             How can I help you today?\n
             كيف يمكنني مساعدتك اليوم؟\n
             Comment puis-je vous aider aujourd’hui ?\n
+            Як я можу вам допомогти сьогодні?
         """
 
 
